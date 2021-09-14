@@ -1,0 +1,17 @@
+export const REQUEST = 'REQUEST'
+export const CONFIG_SYSTEM = 'CONFIG_SYSTEM'
+export const OPEN_ROUTER = 'OPEN_ROUTER'
+export const SET_SIDE_MENU = 'SET_SIDE_MENU'
+export const SET_FILTERED_ROUTES = 'SET_FILTERED_ROUTES'
+
+// 登录权限
+export const LOGIN     = 'LOGIN'
+export const LOGOUT    = 'LOGOUT'
+export const SET_TOKEN = 'SET_TOKEN'
+export const SET_USER_MENU     = 'SET_USER_MENU'
+export const SET_USER_INFO     = 'SET_USER_INFO'
+export const SET_USER_ROUTES   = 'SET_USER_ROUTES'
+export const ROUTERS_TAB = 'ROUTERS_TAB'
+export const PERSONAL_INFO = 'PERSONAL_INFO'
+export const PERSONAL_MENU = 'PERSONAL_MENU'
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD'

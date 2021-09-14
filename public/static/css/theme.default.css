@@ -1,0 +1,38 @@
+.framework {background: #f5f7f9;height: 100%;}
+.layout-header{height:60px;line-height: 60px;background:#FFF;box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);z-index: 100;}
+.layout-side{position:fixed;z-index:98;top:0;bottom:0;left:0;width:220px;overflow:auto;background: #FFF;box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);}
+.layout-main{overflow-x:hidden}
+.layout-header.fixed{position:fixed;top:0;left:220px;right: 0}
+
+
+.layout-side .el-menu-item,
+.layout-side .el-menu-item i,
+.layout-side .el-menu-item span,
+.layout-side .el-submenu__title,
+.layout-side .el-submenu__title i,
+.layout-side .el-submenu__title span{
+    color: #515a6e;
+}
+.layout-side .el-menu-item.is-active span{
+    color:#2d8cf0
+}
+
+.layout-side .el-menu--collapse{width:70px;text-align: center;}
+.layout-side .el-menu{border-right:0}
+.layout-side .el-menu--collapse .el-menu-item i, .layout-side .el-menu--collapse .el-submenu__title i{margin-right: 0}
+.layout-side .el-menu-item:hover{background: none;color: #2d8cf0}
+
+.main-card{padding: 20px;background: #FFF;}
+.data-container{margin: 20px 0}
+.title-tab .el-tabs__header {margin-bottom: 1px;margin-left:5px}
+.title-tab .el-tabs__nav-wrap::after {height: 0}
+
+
+.layout-side.dark{background:#191a23}
+.layout-side.dark .el-menu{background: none}
+.layout-side.dark .el-submenu__title:hover, .layout-side.dark .el-menu-item:hover, .layout-side.dark .el-submenu__title:hover i{
+    background: none;
+    color:#FFF
+}
+.layout-side.dark .el-menu-item{color: #b8b8ba}
+.layout-side.dark .el-submenu__title{color: #b8b8ba}
