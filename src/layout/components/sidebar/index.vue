@@ -41,7 +41,7 @@ export default defineComponent({
 }
 
 .el-menu-item i,
-.el-submenu__title i {
+.el-sub-menu__title i {
   margin-right: 8px;
 }
 

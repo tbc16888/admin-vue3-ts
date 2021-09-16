@@ -9,11 +9,11 @@
 
       <div style="flex: 1;overflow:hidden;" class="tbc-flex-row">
         <tbc-horizontal-scroll>
-          <el-menu class="tbc-top-menu1" mode="horizontal" @select="onMenuModuleClick">
-            <el-menu-item v-for="(item, index) in menuModule" :key="index" :index="index + ''">
-              {{ item.title }}
-            </el-menu-item>
-          </el-menu>
+<!--          <el-menu class="tbc-top-menu1" mode="horizontal" @select="onMenuModuleClick">-->
+<!--            <el-menu-item v-for="(item, index) in menuModule" :key="index" :index="index + ''">-->
+<!--              {{ item.title }}-->
+<!--            </el-menu-item>-->
+<!--          </el-menu>-->
         </tbc-horizontal-scroll>
       </div>
 

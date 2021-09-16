@@ -1,5 +1,5 @@
 <template>
-  <el-submenu :index="menu.name">
+  <el-sub-menu :index="menu.name">
     <template #title>
       <i class="iconfont" :class="menu.icon" v-if="menu.icon"></i>
       <span>{{menu.title}}</span>
@@ -19,7 +19,7 @@
     <el-menu-item-group title="分组2">
       <el-menu-item index="1-3">选项3</el-menu-item>
     </el-menu-item-group> -->
-  </el-submenu>
+  </el-sub-menu>
 </template>
 <script>
   import MenuItem from './MenuItem'

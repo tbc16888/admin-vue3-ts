@@ -1,5 +1,4 @@
 import router from '@/router'
-import module from '@/router/routes.menu.module'
 import {Commit} from 'vuex'
 
 // 判定是否需要缓存
