@@ -1,6 +1,6 @@
 <template>
   <el-cascader :props="elProps" v-model="selectValue" ref="selector"
-               clearable
+               clearable style="width: 100%"
                @change="changeModelValue"></el-cascader>
 </template>
 <script lang="ts">

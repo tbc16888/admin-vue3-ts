@@ -79,14 +79,6 @@
               {{ option.label }}
             </el-radio>
           </el-radio-group>
-
-          <!-- 异步选择器 -->
-          <tbc-selector v-if="item.type === 'selector'" :api="item.api" :check-strictly="item.checkStrictly"
-                        style="width: 100%">
-
-          </tbc-selector>
-
-          <tbc-rich-editor v-if="item.type === 'editor'" v-model="item.value"></tbc-rich-editor>
         </slot>
       </el-form-item>
     </template>

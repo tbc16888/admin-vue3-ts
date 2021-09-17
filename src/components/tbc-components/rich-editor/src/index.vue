@@ -2,7 +2,7 @@
   <el-input :id="id" type="textarea" style="width: 99.9%;"></el-input>
 </template>
 <script lang="ts">
-import {defineComponent, onMounted} from 'vue'
+import {defineComponent, onMounted, watch} from 'vue'
 
 const tinyMCE = (window as any).tinyMCE
 
@@ -34,8 +34,11 @@ export default defineComponent({
 
 
   setup(props: ComponentProps, {emit}) {
+
     const id = 'editor_' + Math.random().toString().substring(2, 4)
+
     let imagePickCallback = null
+
     const init = () => {
       if (typeof tinyMCE === 'undefined') return; // throw Error('请引入tinymce文件')
       tinyMCE.init({
@@ -47,7 +50,9 @@ export default defineComponent({
         language: 'zh_CN',
         file_picker_callback: function (callback) {
           imagePickCallback = callback
+          emit('filePicker')
         },
+
         setup(editor) {
           editor.on('init', () => {
             tinyMCE.get(id).setContent(props.modelValue);
@@ -58,6 +63,10 @@ export default defineComponent({
         }
       });
     }
+    watch(() => props.modelValue, function (oldVal, newVal) {
+      console.log(newVal)
+      tinyMCE.get(id).setContent(props.modelValue);
+    })
     onMounted(init)
     return {
       id
