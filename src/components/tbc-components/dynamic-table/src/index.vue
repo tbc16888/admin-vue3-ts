@@ -109,8 +109,8 @@
                            v-show="!button.condition || scope.row[button.condition.field] == button.condition.value"
                            v-for="(button, bi) in column.button"
                            :key="bi">
-                  <template v-if="button.label">
-                    {{ button.label }}
+                  <template v-if="!column.circle">
+                    {{ button.label || '' }}
                   </template>
                 </el-button>
 

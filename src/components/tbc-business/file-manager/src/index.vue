@@ -65,7 +65,7 @@
             class="tbc-list-item"
             :style="item.checked ? 'background:#F1F1F1':''" @click="onFileItemClick(item)">
           <div style="position:absolute;top:10px  ;right:10px;" @click.stop="">
-            <el-checkbox v-model="item.checked"
+            <el-checkbox v-model="item.checked" style="height:auto"
                          @change="onFileCheckboxChange(item)"></el-checkbox>
           </div>
 
@@ -191,7 +191,7 @@ export default defineComponent({
       selectable: [],
       directoryForm: {file_title: '', directory_path: []},
       accept: 'image',
-      maxSelect: 99999, checked: [],
+      maxSelect: 2, checked: [],
       directory: [],
       directoryTree: [],
       files: [],
@@ -199,7 +199,7 @@ export default defineComponent({
     })
 
     // 显示弹窗
-    const show = (): void => {
+    const show = (config): void => {
       dialog.value.show();
       (state.selectable as string[]) = [...state.selectable, ...props.selectable]
       if (!state.fileList.length) getFileList()

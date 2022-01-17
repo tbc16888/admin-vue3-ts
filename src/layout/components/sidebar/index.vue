@@ -44,7 +44,9 @@ export default defineComponent({
 .el-sub-menu__title i {
   margin-right: 8px;
 }
-
+.el-menu--collapse i{
+  margin-right: 0;
+}
 .el-menu-none {
   height: 160px;
   margin: 0 10px 10px;

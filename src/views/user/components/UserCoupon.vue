@@ -1,5 +1,5 @@
 <template>
-  <tbc-dialog title="优惠券" ref="dialog" basic :close-on-click-modal="true" width="900px">
+  <tbc-dialog title="优惠券" ref="dialog" basic>
     <div class="data-container">
       <tbc-dynamic-table
           v-loading="loading"
@@ -7,7 +7,7 @@
           max-height="460"
           :cols="[
             {label: '基本信息', prop: 'coupon_name', width: 220},
-            {label: '优惠 / 门槛', prop: 'discount', width: 200},
+            {label: '优惠', prop: 'discount', width: 120},
             {label: '有效期', prop: 'time',width: 220},
             {label: '状态', prop: 'status'},
             {label: '使用情况', prop: 'use_time', width: 220}]">
@@ -16,29 +16,25 @@
           <p>{{ scope.row.coupon_name }}</p>
         </template>
         <template #discount="scope">
-          <p>优惠：￥{{ scope.row.discount }}</p>
-          <p>门槛：￥{{ scope.row.minimum }}</p>
+          <p>满：￥{{ scope.row.minimum }}</p>
+          <p>减：￥{{ scope.row.discount }}</p>
         </template>
         <template #time="scope">
-          <template>
-            <p>开始：{{ scope.row.effective_start_time }}</p>
-            <p>结束：{{ scope.row.effective_end_time }}</p>
-          </template>
+          <p>开始：{{ scope.row.effective_start_time }}</p>
+          <p>结束：{{ scope.row.effective_end_time }}</p>
         </template>
         <template #status="scope">
-          <el-tag v-if="scope.row.status == 0">待使用</el-tag>
-          <el-tag type="danger" v-if="scope.row.status == 2">已过期</el-tag>
-          <el-tag type="success" v-if="scope.row.status == 1">已使用</el-tag>
+          <el-tag v-if="scope.row.status === 0">待使用</el-tag>
+          <el-tag type="danger" v-if="scope.row.status === 2">已过期</el-tag>
+          <el-tag type="success" v-if="scope.row.status === 1">已使用</el-tag>
         </template>
         <template #use_time="scope">
-          <template>
-            <p>订单：{{ scope.row.order_sn }}</p>
-            <p>时间：{{ scope.row.use_time }}</p>
-          </template>
+          <p>订单：{{ scope.row.order_sn }}</p>
+          <p>时间：{{ scope.row.use_time }}</p>
         </template>
       </tbc-dynamic-table>
     </div>
-    <tbc-pagination ref="page" :total="total" :config="{page, size}" @change="loadDataList"/>
+    <tbc-pagination :total="total" :config="{page, size}" @change="loadDataList"/>
   </tbc-dialog>
 </template>
 <script lang="ts">
@@ -47,6 +43,8 @@ import http from '@/plugin/http'
 import {ElMessage} from "element-plus";
 
 export default defineComponent({
+
+  name: 'user-coupon-list',
 
   setup() {
     const state = reactive({
@@ -63,11 +61,7 @@ export default defineComponent({
       if (params.user_id !== state.user.user_id) state.dataList = []
       state.user.user_id = params.user_id
       dialog.value.show()
-      initDataList()
-    }
-
-    const initDataList = async () => {
-      await loadDataList(1)
+      loadDataList(1)
     }
 
     const loadDataList = async (page?: number, size?: number): Promise<void> => {

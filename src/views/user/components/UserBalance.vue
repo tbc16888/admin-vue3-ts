@@ -1,7 +1,18 @@
 <template>
   <tbc-dialog title="账户明细" ref="dialog" basic :close-on-click-modal="true" width="900px">
     <tbc-pagination :total="total" :config="{page, size}" simple @change="loadDataList">
+      <template #left>
 
+        <el-select v-model="type" size="small" style="margin-right: 10px;width:120px">
+          <el-option v-for="(item, index) in typeList" :key="index" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <el-input v-model="keyword" size="small" style="margin-right: 10px;width:160px" placeholder="关键词">
+        </el-input>
+        <el-button
+            icon="el-icon-search" type="primary" size="small"
+            @click="loadDataList(1)">查询
+        </el-button>
+      </template>
     </tbc-pagination>
     <div class="data-container">
       <tbc-dynamic-table
@@ -36,7 +47,9 @@ import http from '@/plugin/http'
 import {ElMessage} from 'element-plus'
 
 export default defineComponent({
-  name: 'user-integral',
+
+  name: 'user-balance',
+
   setup() {
     const state = reactive({
       dataList: [],
@@ -44,7 +57,10 @@ export default defineComponent({
       size: 10,
       total: 0,
       loading: false,
-      user: {user_id: ''}
+      user: {user_id: ''},
+      typeList: [],
+      type: '',
+      keyword: ''
     })
     const dialog: Ref = ref(null)
     const show = (data: { user_id: string }) => {
@@ -52,6 +68,7 @@ export default defineComponent({
       state.user = data
       dialog.value.show()
       if (!state.dataList.length) initDataList()
+      getTypeList()
     }
     const initDataList = () => {
       state.page = 1
@@ -66,7 +83,9 @@ export default defineComponent({
       const res = await http.get('/user.balance', {
         page,
         size,
-        user_id: state.user.user_id
+        user_id: state.user.user_id,
+        type: state.type,
+        keyword: state.keyword
       })
       state.loading = false
       if (res.data.code !== 0) {
@@ -78,6 +97,13 @@ export default defineComponent({
       }
     }
 
+    const getTypeList = async () => {
+      const res = await http.get('/user.balance/typeList')
+      if (res.data.code !== 0) return
+      const list = res.data.data.list
+      list.unshift({label: '全部', value: ''})
+      state.typeList = list
+    }
     return {
       ...toRefs(state),
       dialog, show, loadDataList

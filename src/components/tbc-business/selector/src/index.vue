@@ -1,6 +1,7 @@
 <template>
   <el-cascader :props="elProps" v-model="selectValue" ref="selector"
-               clearable style="width: 100%"
+               clearable
+               style="width: 100%"
                @change="changeModelValue"></el-cascader>
 </template>
 <script lang="ts">
@@ -116,12 +117,14 @@ export default defineComponent({
       const checkedNodes = selector.value.panel.checkedNodes
       let pathLabel = []
       if (checkedNodes.length) pathLabel = checkedNodes[0].pathLabels
-      emit('update:modelValue', val)
+      emit('update:modelValue', val || [])
       emit('changeLabel', pathLabel)
     }
 
     watch(() => props.modelValue, function (val) {
       selectValue.value = val as string[]
+    }, {
+      deep: true
     })
 
     return {

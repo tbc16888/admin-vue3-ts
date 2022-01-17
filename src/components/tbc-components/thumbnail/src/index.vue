@@ -1,34 +1,31 @@
 <template>
-  <div class="album" style="display: flex;flex-direction: row">
-    <draggable v-model="images" v-bind="dragOptions" tag="div" :component-data="{
+  <div class="thumbnail-list" style="display: flex;flex-direction: row;line-height: normal">
+    <draggable v-model="images" v-bind="dragOptions" :component-data="{
           tag: 'div',
         }" item-key="id" @end="onDragEnd">
       <template #item="{element, index}">
-        <div class="upload-item draggable" :key="element.id" :style="style">
+        <div class="thumbnail-item draggable" :key="element.id" :style="style">
           <img class="thumb" :src="element.value">
           <div class="actions">
-            <span><i class="el-icon-zoom-in" @click="$refs.viewer.show(modelValue, index)"></i></span>
-            <span v-if="showRemove"><i class="el-icon-delete" @click.stop="remove(index)"></i></span>
+            <span><i class="el-icon-zoom-in"
+                     @click="$refs.viewer.show(typeof modelValue === 'string' ? [modelValue]:modelValue, index)"></i></span>
+            <span v-if="!readonly"><i class="el-icon-delete" @click.stop="remove(index)"></i></span>
           </div>
         </div>
       </template>
     </draggable>
 
-    <div class="upload-item" v-if="images.length < max" @click="upload" :style="style">
+    <div class="thumbnail-item" v-if="!readonly && images.length < max" @click="upload" :style="style">
       <i class="el-icon-plus upload reset"></i>
     </div>
-    <image-viewer ref="viewer"/>
   </div>
+  <image-viewer ref="viewer"/>
 </template>
 <script lang="ts">
 
-import {defineComponent, reactive, toRefs, PropType, ref, watch, Ref} from 'vue'
+import {defineComponent, reactive, toRefs, watch} from 'vue'
 import Draggable from 'vuedraggable'
 import ImageViewer from '../../image-viewer/src/index.vue'
-// interface ComponentProps {
-//   width: number | string,
-//   height: number | string,
-// }
 
 export default defineComponent({
 
@@ -42,7 +39,7 @@ export default defineComponent({
   props: {
 
     modelValue: {
-      type: Array as PropType<string[]>,
+      type: [Array, String],
       default() {
         return []
       }
@@ -63,10 +60,10 @@ export default defineComponent({
       default: '120px'
     },
 
-    showRemove: {
+    readonly: {
       type: Boolean,
       default() {
-        return true
+        return false
       }
     }
   },
@@ -79,17 +76,26 @@ export default defineComponent({
     })
 
     const buildImagesData = () => {
-      const imageList: { id: number, value: string }[] = []
-      props.modelValue.forEach((item: string) => {
-        // (state.images as { [k: string]: string | number }[])
+      const imageList: { id: string, value: string }[] = []
+      let source = props.modelValue
+      if (typeof props.modelValue === 'string') source = [props.modelValue]
+      source = source.splice(0, props.max)
+      source.forEach((item: string, index: number) => {
         imageList.push({
-          id: new Date().getTime(),
+          id: buildGuid(),
           value: item
         })
       });
-      (state.images as { id: number, value: string }[]) = imageList
+      (state.images as { id: string, value: string }[]) = imageList
     }
 
+    const buildGuid = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
 
     const dragOptions = reactive({
       animation: 300,
@@ -122,6 +128,8 @@ export default defineComponent({
     watch(() => props.modelValue, function (newVal, oldVal) {
       if (newVal.length === oldVal.length) return
       buildImagesData()
+    }, {
+      deep: true
     })
 
 
@@ -137,7 +145,7 @@ export default defineComponent({
 })
 </script>
 <style scoped="upload">
-.upload-item {
+.thumbnail-item {
   overflow: hidden;
   box-sizing: border-box;
   width: 150px;
@@ -148,13 +156,13 @@ export default defineComponent({
   border-radius: 4px;
 }
 
-.upload-item .thumb {
+.thumbnail-item .thumb {
   width: 100%;
   height: 100%;
   border-radius: 6px;
 }
 
-.upload-item .upload {
+.thumbnail-item .upload {
   position: absolute;
   left: 0;
   right: 0;
@@ -169,7 +177,7 @@ export default defineComponent({
   display: inline-block;
 }
 
-.upload-item .actions {
+.thumbnail-item .actions {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -184,17 +192,17 @@ export default defineComponent({
   transition: opacity .3s;
 }
 
-.upload-item .actions:hover {
+.thumbnail-item .actions:hover {
   opacity: 1
 }
 
-.upload-item .actions:hover span {
+.thumbnail-item .actions:hover span {
   color: #FFF;
   cursor: pointer;
   display: inline-block;
 }
 
-.upload-item .status {
+.thumbnail-item .status {
   position: absolute;
   right: -15px;
   top: -6px;
@@ -206,11 +214,11 @@ export default defineComponent({
   box-shadow: 0 0 1pc 1px rgba(0, 0, 0, .2);
 }
 
-.upload-item:hover .status {
+.thumbnail-item:hover .status {
   display: none
 }
 
-.upload-item .actions:after {
+.thumbnail-item .actions:after {
   display: inline-block;
   content: "";
   height: 100%;

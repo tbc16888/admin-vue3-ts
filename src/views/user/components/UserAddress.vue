@@ -20,7 +20,7 @@
               v-model="scope.row.is_default"
               active-color="#13ce66"
               :active-value="1"
-              inactive-value="0" @change="changeAddress(scope.row)">
+              :inactive-value="0" @change="changeAddress(scope.row)">
           </el-switch>
         </template>
       </tbc-dynamic-table>
@@ -34,6 +34,8 @@ import http from '@/plugin/http'
 import {ElMessage} from "element-plus";
 
 export default defineComponent({
+
+  name: 'user-address-list',
 
   setup() {
     const state = reactive({
@@ -50,11 +52,7 @@ export default defineComponent({
       if (params.user_id !== state.user.user_id) state.dataList = []
       state.user.user_id = params.user_id
       dialog.value.show()
-      initDataList()
-    }
-
-    const initDataList = async () => {
-      await loadDataList(1)
+      loadDataList(1)
     }
 
     const loadDataList = async (page?: number, size?: number): Promise<void> => {
@@ -77,12 +75,11 @@ export default defineComponent({
     }
 
     const changeAddress = async (data: Record<string, string | number>) => {
-      state.loading = true
-      // data.user_id = state.user.user_id
-      // const res = await http.post('/user.address/edit', data)
-      // state.loading = false
-      // if (res.data.code !== 0) return ElMessage.error(res.data.message)
-      // await loadDataList(1)
+      if (!data.address_id) return
+      data.user_id = state.user.user_id
+      const res = await http.post('/user.address/edit', data)
+      if (res.data.code !== 0) return ElMessage.error(res.data.message)
+      await loadDataList(1)
     }
 
     return {
