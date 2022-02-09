@@ -9,11 +9,11 @@
 
       <div style="flex: 1;overflow:hidden;" class="tbc-flex-row">
         <tbc-horizontal-scroll>
-<!--          <el-menu class="tbc-top-menu1" mode="horizontal" @select="onMenuModuleClick">-->
-<!--            <el-menu-item v-for="(item, index) in menuModule" :key="index" :index="index + ''">-->
-<!--              {{ item.title }}-->
-<!--            </el-menu-item>-->
-<!--          </el-menu>-->
+          <!--          <el-menu class="tbc-top-menu1" mode="horizontal" @select="onMenuModuleClick">-->
+          <!--            <el-menu-item v-for="(item, index) in menuModule" :key="index" :index="index + ''">-->
+          <!--              {{ item.title }}-->
+          <!--            </el-menu-item>-->
+          <!--          </el-menu>-->
         </tbc-horizontal-scroll>
       </div>
 
@@ -24,22 +24,19 @@
             <i class="iconfont" :class="item.icon"></i>
           </el-tooltip>
         </div>
-        <div style="color:#515a6e;padding:0 16px;">
-          <el-dropdown :show-timeout="10">
-            <div>
-              {{ loginUserInfo.nick_name }}
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </div>
-            <template v-slot:dropdown>
+        <div style="color:#515a6e;padding:0 16px;display: flex;align-items: center">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+          {{ loginUserInfo.nick_name }}
+              <el-icon class="el-icon--right">
+                <arrow-down/>
+              </el-icon>
+            </span>
+            <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>
                   <router-link to="/">首页</router-link>
                 </el-dropdown-item>
-<!--                <el-dropdown-item @click="showUserInfo(loginUserInfo)-->
-<!--    ">-->
-<!--                  <a href="javascript:void(0)">个人信息-->
-<!--                  </a>-->
-<!--                </el-dropdown-item>-->
                 <el-dropdown-item @click="$refs.password.show()">
                   <a href="javascript:void(0)">修改密码</a>
                 </el-dropdown-item>
@@ -47,13 +44,14 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
+
         </div>
       </div>
     </div>
     <slot></slot>
   </div>
   <tbc-dialog title="修改密码" ref="password" @confirm="changePassword" width="500px">
-    <tbc-dynamic-form :form="passwordForm" class="compact"/>
+    <tbc-dynamic-form :form="passwordForm" class="compact" size="large"/>
   </tbc-dialog>
   <!-- <user-form ref="user"></user-form> -->
 </template>

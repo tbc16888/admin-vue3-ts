@@ -1,9 +1,9 @@
 <template>
   <div class="pagination" style="display: flex;flex-direction: row;align-items: center;">
-    <div style="flex: 1;">
+    <div style="flex: 1;display:flex;flex-display:row;">
       <slot name="left"></slot>
     </div>
-    <div>
+    <div style="display:flex;flex-display:row;margin-right: 8px">
       <slot name="right"></slot>
     </div>
 

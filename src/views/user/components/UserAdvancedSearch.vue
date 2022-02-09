@@ -1,17 +1,17 @@
 <template>
-  <tbc-dialog ref="dialog" title="高级搜索" width="900px">
+  <tbc-dialog ref="dialog" title="高级搜索" width="700px">
     <el-form label-position="top" class="compact">
       <el-row :gutter="20">
         <el-col :span="14">
           <el-form-item label="关键词">
-            <el-input placeholder="昵称、手机号、ID" v-model="filter.keyword" clearable>
+            <el-input placeholder="昵称、手机号、ID" v-model="filter.keyword" clearable size="large">
 
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="用户状态">
-            <el-select v-model="filter.status" style="width: 100%">
+            <el-select v-model="filter.status" style="width: 100%" size="large">
               <el-option
                   :label="item.label"
                   :value="item.value"
@@ -28,16 +28,16 @@
       <el-row :gutter="20">
         <el-col :span="14">
           <el-form-item label="注册时间">
-            <el-date-picker type="datetimerange" v-model="registerSection" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="datetimerange" v-model="registerSection" style="width: 100%;" size="large"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <template v-slot:footer>
+    <template #footer>
       <div style="text-align: right;margin-top: 10px">
-        <el-button icon="el-icon-refresh" @click.stop="reset">重置</el-button>
-        <el-button type="info" icon="el-icon-search" @click.stop="doExport">导出</el-button>
-        <el-button type="primary" icon="el-icon-search" @click.stop="doSearch">搜索</el-button>
+        <el-button icon="refresh" @click.stop="reset">重置</el-button>
+        <el-button type="info" icon="download" @click.stop="doExport">导出</el-button>
+        <el-button type="primary" icon="search" @click.stop="doSearch">搜索</el-button>
       </div>
     </template>
   </tbc-dialog>
@@ -92,23 +92,5 @@ export default defineComponent({
       doExport
     }
   }
-
-
-  // methods: {
-  //
-  //
-  //   _doSearch() {
-  //     if (this.registerSection === null) this.registerSection = ['', '']
-  //     this.filter.register_time_1 = this.registerSection[0]
-  //     this.filter.register_time_2 = this.registerSection[1]
-  //     this.$emit('search', this.filter)
-  //     this.close()
-  //   },
-  //
-  //   _doExport() {
-  //     this.close()
-  //     this.$emit('export', this.filter)
-  //   }
-  // }
 })
 </script>

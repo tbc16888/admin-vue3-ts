@@ -1,23 +1,22 @@
 <template>
   <tbc-dialog title="系统角色" ref="dialog" basic width="700px">
     <tbc-pagination :total="total" :config="{page, size}" simple>
-      <template v-slot:left>
-        <el-input placeholder="关键字" class="short" v-model="keyword" size="small" clearable
+      <template #left>
+        <el-input placeholder="关键字" class="short" v-model="keyword" clearable
                   style="width:300px;margin-right: 10px;">
-          <template v-slot:append>
-            <el-button icon="el-icon-search" type="primary" size="small" @click="loadDataList(1)">查询
+          <template #append>
+            <el-button icon="search" type="primary" @click="loadDataList(1)">查询
             </el-button>
           </template>
         </el-input>
-        <el-button icon="el-icon-refresh" @click="choice({role_id: '', role_name: ''})" style="margin-left: 10px"
-                   size="small">
+        <el-button icon="refresh" @click="choice({role_id: '', role_name: ''})" style="margin-left: 10px"
+                  >
           清空
         </el-button>
       </template>
-      <template v-slot:right>
+      <template #right>
         <el-button
-            size="small"
-            icon="el-icon-refresh"
+            icon="refresh"
             circle
             @click="loadDataList(page)"
         ></el-button>

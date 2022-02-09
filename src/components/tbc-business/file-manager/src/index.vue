@@ -2,55 +2,55 @@
   <teleport to="body">
     <tbc-dialog title="文件管理" ref="dialog" basic width="950px">
       <div style="display: flex;flex-direction: row">
-        <el-input placeholder="文件名" class="short" v-model="keyword" clearable size="small" style="width:260px;">
+        <el-input placeholder="文件名" class="short" v-model="keyword" clearable style="width:260px;" prefix-icon="search">
           <template #append>
             <el-button
-                icon="el-icon-search" type="primary" size="small"
+                icon="search" type="primary"
                 @click="getFileList(1)">查询
             </el-button>
           </template>
         </el-input>
         <el-button-group style="margin:0 10px;flex:1">
-          <el-tooltip class="item" effect="dark" :content="item.tips" placement="top"
-                      v-for="(item, index) in [
-          {label: '全选', tips: '本页面所有文件全部选择', code: 'all', icon: 'el-icon-circle-check'},
-          {label: '反选', tips: '反向勾选当前页的文件', code: 'reverse', icon: 'el-icon-refresh-left'},
-          {label: '取消', tips: '取消本页已经选择的文件', code: 'cancel', icon: 'el-icon-remove-outline'},
-          {label: '清除', tips: '清除所有已经选择的文件', code: 'remove', icon: 'el-icon-delete'},
-      ]" :key="index">
-            <el-button :icon="item.icon" size="small" @click="onQuickSelectClick(item)">
+          <el-tooltip class="item" effect="dark" :content="item.tips" placement="top" v-for="(item, index) in [
+{label: '全选', tips: '本页面所有文件全部选择', code: 'all', icon: 'circle-check'},
+{label: '反选', tips: '反向勾选当前页的文件', code: 'reverse', icon: 'refresh-left'},
+{label: '取消', tips: '取消本页已经选择的文件', code: 'cancel', icon: 'remove'},
+{label: '清除', tips: '清除所有已经选择的文件', code: 'remove', icon: 'delete'},
+              ]" :key="index">
+            <el-button :icon="item.icon" @click="onQuickSelectClick(item)">
               {{ item.label }}
             </el-button>
           </el-tooltip>
         </el-button-group>
+
         <el-button-group>
-          <el-button size="small" icon="el-icon-upload" @click.stop="$refs.uploadComponent.show()"
+          <el-button icon="upload" @click.stop="$refs.uploadComponent.show()"
                      type="success">
             上传
           </el-button>
-          <el-button size="small" icon="el-icon-rank" @click.stop="showMovePanel()"
+          <el-button icon="rank" @click.stop="showMovePanel()"
                      type="info">
             移动
           </el-button>
-          <el-button size="small" icon="el-icon-delete" @click.stop="deleteFile"
+          <el-button icon="delete" @click.stop="deleteFile"
                      type="danger">
             删除
           </el-button>
-          <el-button icon="el-icon-success" type="primary" size="small"
+          <el-button size="default" icon="success-filled" type="primary"
                      @click="confirmSelect">确认({{ selectedFiles.length }})
           </el-button>
         </el-button-group>
       </div>
 
-      <div style="margin-top: 20px;display: flex;flex-direction: row">
-        <el-breadcrumb separator-class="el-icon-arrow-right" style="flex:1">
+      <div style="margin-top: 20px;display: flex;flex-direction: row;    align-items: center;">
+        <el-breadcrumb separator-class="arrow-right" style="flex:1">
           <el-breadcrumb-item v-for="(item, index) in directoryPath" :key="index">
             <template v-if="index === directoryPath.length - 1">{{ item.label }}</template>
             <a href="javascript:void(0)" style="cursor: pointer" @click="onPathItemClick(item, index)"
                v-if="index < directoryPath.length - 1">{{ item.label }}</a>
           </el-breadcrumb-item>
         </el-breadcrumb>
-        <el-button size="small" icon="el-icon-plus" type="text" style="line-height: normal;min-height: 0;padding:0"
+        <el-button icon="plus" type="text" style="line-height: normal;min-height: 0;padding:0"
                    @click="showAddPanel">
           添加目录
         </el-button>
@@ -432,6 +432,9 @@ export default defineComponent({
 })
 </script>
 <style scoped>
+.el-button{
+  font-size: 12px
+}
 .tbc-list-item {
   position: relative;
   padding: 10px;

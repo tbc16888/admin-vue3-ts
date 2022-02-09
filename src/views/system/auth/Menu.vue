@@ -1,23 +1,26 @@
 <template>
   <container title="系统菜单">
+    <template #tips>
+      <div style="padding-bottom: 20px">
+        <tbc-pagination :total="total" :config="{page, size}" simple @change="loadDataList">
+          <template #left>
+            <tbc-selector
+                field="parent_id"
+                v-model="menuPath"
+                api="/system.menu"
+                check-strictly
+                style="width:240px;margin-right:10px;"
+                @change="changePath"/>
+          </template>
+          <template #right>
+            <el-button icon="plus" circle @click="$refs.form.show()"></el-button>
+            <el-button icon="refresh" circle @click="loadDataList(page)"></el-button>
+          </template>
+        </tbc-pagination>
+      </div>
+    </template>
 
     <div class="main-card" v-loading="loading">
-      <tbc-pagination :total="total" :config="{page, size}" simple @change="loadDataList">
-        <template v-slot:left>
-          <tbc-selector
-              ref="cat"
-              api="/system.menu"
-              field="parent_id"
-              v-model="menuPath"
-              :check-strictly="true"
-              style="min-width:300px;margin-right:10px;"/>
-        </template>
-        <template v-slot:right>
-          <el-button size="small" icon="el-icon-plus" circle @click="$refs.form.show()"></el-button>
-          <el-button size="small" icon="el-icon-refresh" circle @click="loadDataList(page)"></el-button>
-        </template>
-      </tbc-pagination>
-
       <div class="data-container">
         <tbc-dynamic-table
             v-loading="loading"
@@ -37,11 +40,11 @@
                 {label: '编辑', type: 'text', code: 'edit'},
                 {label: '删除', type: 'text', code: 'delete'},
         ]}]">
-          <template v-slot:cat_name="scope">
+          <template #cat_name="scope">
             <p>{{ scope.row.cat_id }}</p>
             <p>{{ scope.row.cat_name }}</p>
           </template>
-          <template v-slot:api="scope">
+          <template #api="scope">
             <p>
               <span>{{ scope.row.module }}</span>
               <span v-if="scope.row.controller">/{{ scope.row.controller }}</span>
@@ -57,14 +60,14 @@
 </template>
 <script lang="ts">
 import {
-  defineComponent, toRefs, onMounted, defineAsyncComponent,
+  defineComponent, onMounted, defineAsyncComponent,
   ref, Ref
 } from 'vue'
 import useMenu from './api/menu'
 
 export default defineComponent({
 
-  name: 'system-menu-menu',
+  name: 'system-menu',
 
   components: {
     MenuForm: defineAsyncComponent(() =>
@@ -74,19 +77,21 @@ export default defineComponent({
   setup() {
 
     const menu = useMenu()
-    const menuPath: Ref = ref([])
     const form: Ref = ref(null)
+
     const onButtonClick = (data: { menu_id: string }, action: string) => {
       if (action === 'children') {
-        menu.parentId.value = data.menu_id
-        menuPath.value.push(data.menu_id)
-        console.log(menuPath)
+        menu.parentId.value = data.menu_id;
+        (menu.menuPath.value as string[]) = [...menu.menuPath.value, data.menu_id]
         menu.loadDataList(1)
       }
-      if (action === 'edit') {
-        form.value.show(data)
-      }
+      if (action === 'edit') form.value.show(data)
       if (action === 'delete') return menu.deleteDataItem(data)
+    }
+
+    const changePath = (data) => {
+      menu.parentId.value = data ? data[data.length - 1] : ''
+      menu.loadDataList(1)
     }
 
     onMounted(() => {
@@ -94,64 +99,11 @@ export default defineComponent({
     })
 
     return {
-      ...toRefs(menu),
+      ...menu,
       form,
-      menuPath,
       onButtonClick,
+      changePath
     }
-  },
-
-
-  // methods111: {
-  //   sortChange(data) {
-  //     this.order = [data.prop, data.order === 'ascending' ? 'asc' : 'desc'].join(',')
-  //     this.loadDataList(1)
-  //   },
-  //
-  //
-  //   search(filter) {
-  //     for (let i in filter) this.filter[i] = filter[i]
-  //     this.loadDataList()
-  //     let index = this.tabBarList.findIndex(item =>
-  //         item.status === this.filter.sale_status)
-  //     this.tabBarName = this.tabBarList[index].name
-  //   },
-  //
-  //
-  //   async quickEdit(data) {
-  //     const res = await this.http.post('/goods/quickEdit', data);
-  //     if (res.data.code !== 0) this.$message.error(res.data.message)
-  //     this.$message.success(res.data.message)
-  //     return res
-  //   },
-  //
-  //   showBatch() {
-  //     this.selection = this.$refs.table.selection
-  //     if (!this.selection.length) return this.$message.warning('请选择要设置的行')
-  //     this.$refs.batch.show(this.selection)
-  //   },
-  //
-  //   toGoodsForm(item) {
-  //     this.$router.push({name: 'goods-add', query: {type: item.code}})
-  //   },
-  //
-  //
-  //   // 上下架
-  //   async changeSaleStatus(data) {
-  //     this.$confirm('确定操作？', '提示', {
-  //       confirmButtonText: '确定',
-  //       cancelButtonText: '取消',
-  //       type: 'warning'
-  //     }).then(async () => {
-  //       const res = await this.http.post('/goods/changeSaleStatus', {
-  //         goods_id: data.goods_id,
-  //         status: data.sale_status === 1 ? 2 : 1
-  //       });
-  //       if (res.data.code !== 0) return this.$message.error(res.data.message)
-  //       data.sale_status = data.sale_status === 1 ? 2 : 1
-  //     });
-  //   },
-  //
-  // },
+  }
 })
 </script>

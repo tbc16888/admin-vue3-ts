@@ -10,71 +10,69 @@
         </template>
 
         <slot :name="item.field" :item="item">
-          <!-- 文本框 -->
-          <el-input v-if="item.type === 'textarea'" v-model="item.value" :disabled="item.disabled" type="textarea"
-                    @input="change"
-                    :rows="item.rows"
-                    :readonly="item.readonly">
-
-          </el-input>
 
           <!-- 输入框 -->
-          <el-input v-if="item.type === 'input'" v-model="item.value" :disabled="item.disabled"
-                    :readonly="item.readonly">
-            <template v-slot:append v-if="item.button">
-              <el-button v-if="item.button" :icon="item.button.icon" @click="click(index)">
+          <el-input v-if="['input', 'password', 'textarea', 'text'].indexOf(item.type) > -1" v-model="item.value"
+                    :disabled="item.disabled" :type="item.type"
+                    :show-password="item.type === 'password'" :size="size"
+                    :rows="item.rows || 2"
+                    :maxlength="item.maxLength || ''"
+                    :minlength="item.minLength || ''"
+                    :show-word-limit="item.showWordLimit || false"
+                    :readonly="item.readonly" :clearable="item.clearable">
+            <template #append v-if="item.button">
+              <el-button :icon="item.button.icon" @click="click(index)">
                 {{ item.button.label }}
               </el-button>
             </template>
           </el-input>
 
-          <!-- 密码框 -->
-          <el-input v-if="item.type === 'password'" v-model="item.value" :disabled="item.disabled"
-                    :readonly="item.readonly" show-password>
-          </el-input>
 
           <!-- 数字框 -->
-          <el-input-number v-if="item.type === 'input-number'" v-model="item.value" :disabled="item.disabled" @change="change(index)"
+          <el-input-number v-if="item.type === 'input-number'" v-model="item.value" :disabled="item.disabled"
+                           @change="change(index)"
                            controls-position="right" :min="item.min || 0" :max="item.max || 999999"
                            :style="item.style || 'width:100%'"
                            :step="item.step || 1" :class="item.class || 'text-left'">
           </el-input-number>
 
           <!-- 输入和颜色选择 -->
-          <div v-if="item.type === 'input-color'" style="position: relative;">
 
-            <div style="display: flex;flex-direction: row">
-              <el-input v-model="item.value" :disabled="item.disabled" :readonly="item.readonly" @change="change(index)">
-              </el-input>
-              <div style="width: 4px"></div>
-              <el-color-picker v-model="item.value" :show-alpha="item.showAlpha || false" style="display: block" @change="change(index)">
-              </el-color-picker>
-            </div>
+          <div style="display: flex;flex-direction: row;width: 100%" v-if="item.type === 'input-color'">
+            <el-input v-model="item.value" :disabled="item.disabled" :readonly="item.readonly" :size="size"
+                      @change="change(index)">
+            </el-input>
+            <div style="width: 4px"></div>
+            <el-color-picker v-model="item.value" :show-alpha="item.showAlpha || false" style="display: block"
+                             :size="size"
+                             @change="change(index)">
+            </el-color-picker>
           </div>
 
           <!-- 选择框 -->
-          <el-select v-if="item.type === 'select'" v-model="item.value" style="width: 100%">
-            <el-option v-for="(option, idx) in item.options" :key="idx" :label="option.label" :value="option.value">
+          <el-select v-if="item.type === 'select'" v-model="item.value" style="width: 100%" :size="size">
+            <el-option v-for="(option) in item.options" :key="option.value" :label="option.label" :value="option.value">
             </el-option>
           </el-select>
 
 
           <!-- 日期 -->
           <el-date-picker v-if="['date', 'datetime', 'datetimerange'].indexOf(item.type) > -1" v-model="item.value"
+                          :size="size"
                           :type="item.type" :format="item.type === 'date' ? 'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss'"
                           :placeholder="item.placeholder || '请选择'" :start-placeholder="item.startPlaceholder || '开始日期'"
                           :end-placeholder="item.endPlaceholder || '结束日期'" :style="item.style || 'width:100%'">
           </el-date-picker>
 
           <!-- 复选框 -->
-          <el-checkbox-group v-if="item.type === 'checkbox'" v-model="item.value" size="medium">
+          <el-checkbox-group v-if="item.type === 'checkbox'" v-model="item.value">
             <el-checkbox :label="option.value" v-for="(option) in item.options" :key="option.value">
               {{ option.label }}
             </el-checkbox>
           </el-checkbox-group>
 
           <!-- 单选框 -->
-          <el-radio-group v-if="item.type === 'radio'" v-model="item.value" size="medium">
+          <el-radio-group v-if="item.type === 'radio'" v-model="item.value">
             <el-radio :label="option.value" v-for="(option) in item.options" :key="option.value">
               {{ option.label }}
             </el-radio>
@@ -107,7 +105,7 @@ export default defineComponent({
       }
     },
 
-    classes: {
+    size: {
       type: String,
       default() {
         return ''

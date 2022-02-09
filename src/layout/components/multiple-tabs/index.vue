@@ -7,7 +7,7 @@
                    :name="route.fullPath" :closable="index > 0">
       </el-tab-pane>
     </el-tabs>
-    <el-button size="small" icon="el-icon-arrow-down"
+    <el-button icon="arrow-down"
                style="padding:0;border:0;width: 32px;position: absolute;right: 0;top:50%;margin-top: -16px"
                @click="showContextMenu"></el-button>
   </div>

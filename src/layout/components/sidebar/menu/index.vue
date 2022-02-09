@@ -36,13 +36,11 @@ export default defineComponent({
     const sideMenu = computed(() => store.getters.sideMenu)
     const sideMenuIndex = computed(() => store.getters.sideMenuIndex)
     const routeName = computed(() => {
-      console.log(route.matched, 'matched')
       return route.name
     })
 
     const sideMenuList = computed(() => {
       if (!sideMenu.value.length) return []
-      console.log(route.matched)
       return sideMenu.value[0].children
       // if (route.matched.length > 0) {
       //   const _side = sideMenu.value.filter((item) => {

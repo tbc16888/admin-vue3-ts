@@ -4,11 +4,11 @@
       <el-tabs v-model="tabPaneIndex">
         <el-tab-pane label="账号信息" name="account">
           <div style="height: 20px"></div>
-          <tbc-dynamic-form :form="dynamicForm1" class="compact"/>
+          <tbc-dynamic-form :form="dynamicForm1" class="compact" size="large"/>
         </el-tab-pane>
         <el-tab-pane label="资料信息" name="information">
           <div style="height: 20px"></div>
-          <tbc-dynamic-form :form="dynamicForm2" class="compact">
+          <tbc-dynamic-form :form="dynamicForm2" class="compact" size="large">
             <template #avatar>
               <tbc-thumbnail v-model="images" width="80px" height="80px" :max="1" @click="$refs.file.show()"/>
             </template>

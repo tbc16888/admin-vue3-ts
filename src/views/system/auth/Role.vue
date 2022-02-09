@@ -2,25 +2,24 @@
   <container title="系统角色" tips="操作系统的用户角色">
     <div class="main-card">
       <tbc-pagination :total="total" :config="{page, size}" simple>
-        <template v-slot:left>
-          <el-input placeholder="关键字" class="short" v-model="keyword" size="small" clearable
-                    style="width:300px;margin-right: 10px;">
-            <template v-slot:append>
-              <el-button icon="el-icon-search" type="primary" size="small" @click="loadDataList(1)">查询
-              </el-button>
-            </template>
+        <template #left>
+          <el-input placeholder="角色名称" class="short" v-model="keyword" clearable prefix-icon="search"
+                    style="margin-right:10px;width:200px;">
           </el-input>
+          <el-button icon="search" type="primary"
+                     @click="loadDataList(1)">查询
+          </el-button>
         </template>
-        <template v-slot:right>
+        <template #right>
           <el-button
-              size="small"
-              icon="el-icon-plus"
+
+              icon="plus"
               circle
               @click="$refs.form.show()"
           ></el-button>
           <el-button
-              size="small"
-              icon="el-icon-refresh"
+
+              icon="refresh"
               circle
               @click="loadDataList(page)"
           ></el-button>
@@ -33,15 +32,12 @@
             rowKey="role_id"
             :cols="[
           { type: 'selection', width: 55 },
-          { label: 'ID', prop: 'role_id', width: 220 },
-          { label: '角色名称', prop: 'role_name', width: 220 },
+          { label: 'ID/名称', prop: 'role_name', width: 220 },
           { label: '描述', prop: 'role_desc' },
           {
             label: '状态',
             prop: 'status',
-            type: 'switch',
             width: 200,
-            inactive: 2,
           },
           {
             label: '操作',
@@ -65,6 +61,17 @@
           },
         ]"
         >
+          <template #role_name="scope">
+            <p>{{ scope.row.role_id }}</p>
+            <p>{{ scope.row.role_name }}</p>
+          </template>
+          <template #status="scope">
+            <p class="tbc-hover" @click="changeStatus(scope.row)">
+              <el-tag effect="dark" v-if="scope.row.status === 1" type="success">正常</el-tag>
+              <el-tag effect="dark" v-if="scope.row.status === 2" type="danger">禁用</el-tag>
+            </p>
+            <p>{{ scope.row.create_time }}</p>
+          </template>
         </tbc-dynamic-table>
       </div>
       <tbc-pagination :total="total" :config="{page, size}" @change="loadDataList"/>

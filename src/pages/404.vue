@@ -10,6 +10,19 @@
       <el-button @click="$refs.upload.show()">上传</el-button>
       <tbc-selector api="/goods.category/async" check-strictly ref="selector" v-model="selectorValue"/>
     </div>
+    <div style="padding: 10px 0">
+      <el-input placeholder="请选择角色" v-model="inputValue" size="large" readonly>
+        <template #suffix>
+          <el-icon @click="inputValue =''" style="top: 50%;margin-top: -6px;">
+            <circle-close/>
+          </el-icon>
+        </template>
+        <template #append>
+          <el-button icon="search" @click="$refs.role.show()">选择
+          </el-button>
+        </template>
+      </el-input>
+    </div>
     <div style="margin-top: 20px">
       <tbc-thumbnail v-model="images" :max="5" width="100px" height="100px" @upload="$refs.file.show()"/>
     </div>
@@ -54,10 +67,12 @@ export default defineComponent({
     ])
     const distribute: Ref = ref(null)
     const changeSelectorValue = () => {
-      selectorValue.value = ['152527699117965314', '152527699134857218']
+      // selectorValue.value = ['152527699117965314', '152527699134857218']
       // selectorValue.value = ['152527699117965314', '152527699134857218', '152527699234242562']
       // selector.value.reload()
+      selectorValue.value = ['221755721863340032', '221775371811737600']
     }
+    const inputValue: Ref = ref('你好')
     const images = ref<string[]>([])
     const mixin = ref(null)
     const mixinInputValue = ref([
@@ -91,6 +106,7 @@ export default defineComponent({
 
 
     return {
+      inputValue,
       selector,
       selectorValue,
       changeSelectorValue,

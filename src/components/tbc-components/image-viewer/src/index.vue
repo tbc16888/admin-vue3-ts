@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <el-image style="width:0; height:0;" :src="src" :preview-src-list="srcList" ref="image" :z-index="zIndex">
+    <el-image style="width:0; height:0;" :src="src" :preview-src-list="srcList" ref="image" :z-index="zIndex" :initial-index="initialIndex">
     </el-image>
   </teleport>
 </template>
@@ -27,8 +27,11 @@ export default defineComponent({
     const image: Ref = ref(null)
     const src = ref('')
     const srcList = ref([])
-    const show = (data: never[], index: number) => {
+    const initialIndex = ref(0)
+    const show = (data: string[], index: number) => {
+      console.log('huiddd', data)
       src.value = data[index]
+      initialIndex.value = index
       srcList.value = data
       setTimeout(() => {
         image.value.clickHandler()
@@ -37,6 +40,7 @@ export default defineComponent({
     return {
       src,
       srcList,
+      initialIndex,
       show,
       image
     }

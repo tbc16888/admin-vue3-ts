@@ -5,7 +5,7 @@
         <el-input v-model="userInfo.balance" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="调整数量">
-        <el-input-number size="medium" v-model="form.amount"></el-input-number>
+        <el-input-number v-model="form.amount"></el-input-number>
       </el-form-item>
       <el-form-item label="备注">
         <el-input type="textarea" :rows="4" v-model="form.remark"></el-input>

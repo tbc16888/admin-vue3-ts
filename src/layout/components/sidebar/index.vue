@@ -39,7 +39,9 @@ export default defineComponent({
   padding: 0 45px;
   min-width: 200px;
 }
-
+.el-sub-menu__title{
+  display: block;
+}
 .el-menu-item i,
 .el-sub-menu__title i {
   margin-right: 8px;

@@ -8,7 +8,7 @@
             api="/system.menu"
             field="parent_id"
             v-model="menuPath"
-            :check-strictly="true"
+            check-strictly
             style="width: 100%"/>
       </el-form-item>
 
@@ -51,9 +51,9 @@
       </el-row>
 
       <el-form-item label="图标">
-        <el-input v-model="form.route_name">
-          <template v-slot:append>
-            <el-button icon="el-icon-upload" @click="$refs.file.show()">选择</el-button>
+        <el-input v-model="form.icon">
+          <template #append>
+            <el-button icon="upload" @click="$refs.file.show()">选择</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -81,8 +81,7 @@ export default defineComponent({
 
     const show = (data: Record<string, any>) => {
       dialog.value.show()
-      // form = {...form, ...data}
-      // for (let i in form) if (data[i] !== 'undefined') form[i] = data[i]
+      for (let i in form) form[i] = data[i] || ''
     }
 
     const close = () => {

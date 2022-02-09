@@ -57,7 +57,7 @@
 
             <template v-if="column.type === 'image' ">
               <el-image :style="column.style || 'width:60px;height:46px;'" :src="scope.row[column.prop]"
-                        :fit="column.fit || 'fill'" :preview-src-list="[scope.row[column.prop]]">
+                        :fit="column.fit || 'fill'" :preview-src-list="[scope.row[column.prop]]" append-to-body>
               </el-image>
             </template>
 
@@ -101,7 +101,7 @@
 
             <template v-if="column.type === 'action'">
               <div class="el-highlight">
-                <el-button size="mini"
+                <el-button size="small"
                            :type="button.type"
                            :icon="button.icon"
                            :circle="column.circle || false"
@@ -114,17 +114,17 @@
                   </template>
                 </el-button>
 
-                <el-dropdown v-if="column.more">
-                  <el-button size="mini" type="text" style="margin-left: 10px">
-                    更多 <i class="el-icon-arrow-down"></i>
+                <el-dropdown v-if="column.more" class="cell" style="padding: 0">
+                  <el-button size="small" type="text" style="margin-left: 10px">
+                    更多 <el-icon><arrow-down /></el-icon>
                   </el-button>
-                  <template v-slot:dropdown>
+                  <template #dropdown>
                     <el-dropdown-menu>
                       <el-dropdown-item
                           @click="column.click(scope.row, button.code, scope.$index)"
-                          :command="{row: scope.row, code: button.code, index: scope.$index, click: button.click}"
-                          v-show="!button.condition || scope.row[button.condition.field] == button.condition.value"
-                          v-for="(button, bi) in column.more" :key="bi">{{ button.label }}
+                          :style="{display:!button.condition || scope.row[button.condition.field] == button.condition.value ? 'block':'hidden' }"
+                          v-for="(button, bi) in column.more" :key="bi">
+                        <span>{{ button.label }}</span>
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>

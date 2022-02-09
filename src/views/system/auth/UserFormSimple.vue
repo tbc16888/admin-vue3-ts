@@ -1,11 +1,13 @@
 <template>
-  <tbc-dialog ref="dialog" :title="(form.user_id ? '编辑':'添加') + '用户'" @confirm="formSubmit" width="700px">
-    <tbc-dynamic-form :form="dynamicForm" class="compact">
-      <template v-slot:role_name="scope">
-        <el-input placeholder="请选择角色" @click="$refs.role.show()" v-model="scope.item.value">
-          <template v-slot:append>
-            <el-button icon="el-icon-search" @click="$refs.role.show()">选择
-            </el-button>
+  <tbc-dialog ref="dialog" :title="(form.user_id ? '编辑':'添加') + '用户'" @confirm="formSubmit" width="600px">
+    <tbc-dynamic-form :form="dynamicForm" class="compact" size="large">
+      <template #role_name="{item}">
+        <el-input placeholder="点击选择角色" v-model="item.value" size="large" readonly @click="$refs.role.show()">
+          <template #suffix>
+            <el-icon @click="onRoleSelected({})" v-if="item.value"
+                     style="top: 50%;margin-top: -6px;">
+              <circle-close/>
+            </el-icon>
           </template>
         </el-input>
       </template>
@@ -20,11 +22,13 @@ import RoleSelector from "@/views/system/auth/RoleSelector";
 export default {
   name: 'system-user-form',
 
+  emits: ['success'],
+
   components: {
     RoleSelector
   },
 
-  setup() {
+  setup(_, {emit}) {
     const role = ref(null)
 
     const {proxy} = getCurrentInstance()
@@ -32,11 +36,12 @@ export default {
     const form = reactive({user_id: ''})
     const dynamicForm = reactive([
       {
-        label: '账号', value: '', type: 'input', field: 'account',
-        remark: '（仅限英文字母和数字的组合，且以英文字母开头）'
+        label: '账号', value: '', type: 'text', field: 'account',
+        remark: '（仅限英文字母和数字的组合，且以英文字母开头）', maxLength: 20,
+        showWordLimit: true
       },
       {label: '密码', value: '', type: 'password', field: 'password'},
-      {label: '昵称', value: '', type: 'input', field: 'nick_name'},
+      {label: '昵称', value: '', type: 'input', field: 'nick_name', clearable: true},
       {label: '角色', value: '', type: 'input', field: 'role_name'},
       {label: '角色', value: '', type: 'hidden', field: 'role_id'},
       {
@@ -74,14 +79,14 @@ export default {
       if (res.data.code === 0) proxy.$message.success(res.data.message)
       if (res.data.code !== 0) return;
       close()
-      // emit('success')
+      emit('success')
     }
 
     // 选择角色
     const onRoleSelected = (data) => {
       dynamicForm.forEach(item => {
-        if (item.field === 'role_id') item.value = data.role_id
-        if (item.field === 'role_name') item.value = data.role_name
+        if (item.field === 'role_id') item.value = data.role_id || ''
+        if (item.field === 'role_name') item.value = data.role_name || ''
       });
       role.value.close()
     }

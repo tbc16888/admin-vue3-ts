@@ -1,35 +1,42 @@
 <template>
-  <div class="thumbnail-list" style="display: flex;flex-direction: row;line-height: normal">
-    <draggable v-model="images" v-bind="dragOptions" :component-data="{
-          tag: 'div',
-        }" item-key="id" @end="onDragEnd">
+  <div class="thumbnail-list" style="display: flex;flex-direction: row;">
+    <draggable v-model="images" v-bind="dragOptions" item-key="id" @end="onDragEnd" style="display: flex;flex-direction: row">
       <template #item="{element, index}">
         <div class="thumbnail-item draggable" :key="element.id" :style="style">
           <img class="thumb" :src="element.value">
           <div class="actions">
-            <span><i class="el-icon-zoom-in"
-                     @click="$refs.viewer.show(typeof modelValue === 'string' ? [modelValue]:modelValue, index)"></i></span>
-            <span v-if="!readonly"><i class="el-icon-delete" @click.stop="remove(index)"></i></span>
+            <el-icon @click="showPreview(index)">
+              <zoom-in/>
+            </el-icon>
+            <el-icon v-if="!readonly" @click.stop="remove(index)">
+              <delete/>
+            </el-icon>
           </div>
         </div>
       </template>
     </draggable>
 
     <div class="thumbnail-item" v-if="!readonly && images.length < max" @click="upload" :style="style">
-      <i class="el-icon-plus upload reset"></i>
+      <el-icon style="font-size: 30px;color: #8c939d">
+        <plus/>
+      </el-icon>
+      <i class="plus upload reset"></i>
     </div>
   </div>
   <image-viewer ref="viewer"/>
 </template>
 <script lang="ts">
 
-import {defineComponent, reactive, toRefs, watch} from 'vue'
+import {defineComponent, reactive, toRefs, watch, Ref, ref} from 'vue'
 import Draggable from 'vuedraggable'
 import ImageViewer from '../../image-viewer/src/index.vue'
+import buildGuid from './tools'
 
 export default defineComponent({
 
   name: 'tbc-thumbnail',
+
+  emits: ['upload', 'update:modelValue'],
 
   components: {
     Draggable,
@@ -70,6 +77,7 @@ export default defineComponent({
 
   setup(props: Record<string, any>, {emit}) {
 
+    const viewer: Ref = ref(null)
     const state = reactive({
       style: '',
       images: []
@@ -89,24 +97,16 @@ export default defineComponent({
       (state.images as { id: string, value: string }[]) = imageList
     }
 
-    const buildGuid = () => {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
-
     const dragOptions = reactive({
       animation: 300,
       disabled: false
     })
 
     const buildBoxSize = () => {
-      let aStyle: string[] = []
+      const aStyle: string[] = []
       aStyle.push('width: ' + props.width)
       aStyle.push('height: ' + props.height)
-      return aStyle.join(";")
+      return aStyle.join(';')
     }
 
     const upload = () => {
@@ -124,6 +124,10 @@ export default defineComponent({
       onDragEnd()
     }
 
+    const showPreview = (index: number) => {
+      viewer.value.show(state.images.map(item => item.value), index)
+    }
+
 
     watch(() => props.modelValue, function (newVal, oldVal) {
       if (newVal.length === oldVal.length) return
@@ -139,7 +143,9 @@ export default defineComponent({
       dragOptions,
       upload,
       remove,
-      onDragEnd
+      onDragEnd,
+      viewer,
+      showPreview
     }
   }
 })
@@ -147,13 +153,12 @@ export default defineComponent({
 <style scoped="upload">
 .thumbnail-item {
   overflow: hidden;
-  box-sizing: border-box;
-  width: 150px;
-  height: 150px;
   margin: 0 8px 0 0;
-  display: inline-block;
   position: relative;
-  border-radius: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .thumbnail-item .thumb {
@@ -168,13 +173,9 @@ export default defineComponent({
   right: 0;
   top: 0;
   bottom: 0;
-  text-align: center;
-  color: #8c939d;
   border: 1px dashed #d9d9d9;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 28px;
-  display: inline-block;
 }
 
 .thumbnail-item .actions {
@@ -195,11 +196,9 @@ export default defineComponent({
 .thumbnail-item .actions:hover {
   opacity: 1
 }
-
-.thumbnail-item .actions:hover span {
+.thumbnail-item .actions:hover i {
   color: #FFF;
   cursor: pointer;
-  display: inline-block;
 }
 
 .thumbnail-item .status {

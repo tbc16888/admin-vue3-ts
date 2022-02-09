@@ -5,19 +5,17 @@
         <el-tab-pane v-for="(item, index) in tabList"
                      :label="item.label" :name="item.name" :key="index">
           <div style="height: 20px"></div>
-          <tbc-dynamic-form :form="item.form" class="compact"/>
+          <tbc-dynamic-form :form="item.form" class="compact" size="large">
+            <template :key="form.code" v-for="(form) in editorForm" v-slot:[form.field]="scope">
+              <tbc-rich-editor v-model="scope.item.value"></tbc-rich-editor>
+            </template>
+          </tbc-dynamic-form>
         </el-tab-pane>
       </el-tabs>
-
-
-      <!--      <tbc-dynamic-form :form="dynamicForm" class="compact">-->
-
-      <!--      </tbc-dynamic-form>-->
-
       <div style="margin-top: 20px">
         <!--        <el-affix position="bottom" :offset="20" ref="affix">-->
-        <el-button type="primary" @click="formSubmit" icon="el-icon-edit">保存</el-button>
-        <el-button type="info" @click="getSystemSetting" icon="el-icon-refresh">刷新</el-button>
+        <el-button type="primary" @click="formSubmit" icon="edit">保存</el-button>
+        <el-button type="info" @click="getSystemSetting" icon="refresh">刷新</el-button>
         <!--        </el-affix>-->
       </div>
     </div>
@@ -27,19 +25,21 @@
 import {defineComponent, onMounted, reactive, toRefs} from 'vue'
 import http from '@/plugin/http'
 import {ElMessage} from 'element-plus'
-import TbcDynamicForm from "@/components/tbc-components/dynamic-form/src/index.vue";
 
 export default defineComponent({
+
   name: 'system-config',
-  components: {TbcDynamicForm},
+
   setup() {
 
     const state = reactive({
       dynamicForm: [],
       tabList: [],
       tabIndex: 'base',
-      loading: false
+      loading: false,
+      editorForm: []
     })
+
     // 获取系统配置
     const getSystemSetting = async () => {
       state.loading = true
@@ -63,8 +63,13 @@ export default defineComponent({
         if (tabForm[item.name as string]) item.form = tabForm[item.name as string].form
       })
       state.tabList = tabList as any
-      state.dynamicForm = res.data.data
-      console.log(res.data.data)
+      state.dynamicForm = res.data.data.map(function (item) {
+        item.field = item.code
+        return item
+      })
+      state.editorForm = res.data.data.filter(item => item.type === 'editor')
+      console.log(res.data.data.filter(item => item.type === 'editor'))
+      console.log(state.dynamicForm)
     }
 
     // 保存

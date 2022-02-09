@@ -3,9 +3,9 @@
     <div style="margin-bottom: 20px">
       <el-button-group>
         <el-tooltip class="item" effect="dark" :content="item.tips" placement="top" v-for="(item, index) in [
-                      {label: '全选', tips: '本页面所有文件全部选择', code: 'all', icon: 'el-icon-circle-check'},
-                      {label: '反选', tips: '反向勾选当前页的文件', code: 'reverse', icon: 'el-icon-refresh-left'},
-                      {label: '清除', tips: '清除所有已经选择的文件', code: 'remove', icon: 'el-icon-delete'},
+                      {label: '全选', tips: '本页面所有文件全部选择', code: 'all', icon: 'circle-check'},
+                      {label: '反选', tips: '反向勾选当前页的文件', code: 'reverse', icon: 'refresh-left'},
+                      {label: '清除', tips: '清除所有已经选择的文件', code: 'remove', icon: 'delete'},
                   ]" :key="index">
           <el-button :icon="item.icon" size="small" @click="onQuickSelectClick(item)">
             {{ item.label }}

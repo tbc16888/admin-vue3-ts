@@ -122,6 +122,7 @@ export default defineComponent({
     }
 
     watch(() => props.modelValue, function (val) {
+      console.log('========')
       selectValue.value = val as string[]
     }, {
       deep: true

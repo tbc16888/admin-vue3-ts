@@ -1,44 +1,49 @@
 <template>
   <container title="用户列表">
     <template #tips>
-      <el-tabs v-model="tabBarName" @tab-click="tabBarClick" class="title-tab">
-        <el-tab-pane v-for="(item, index) in tabBarList" :label="item.label" :name="item.name" :key="index">
-        </el-tab-pane>
-      </el-tabs>
+<!--      <el-tabs v-model="tabBarName" @tab-click="tabBarClick" class="title-tab">-->
+<!--        <el-tab-pane v-for="(item, index) in tabBarList" :label="item.label" :name="item.name" :key="index">-->
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
+        <div style="padding-bottom: 20px">
+          <tbc-pagination :total="total" simple :config="{page, size}" @change="loadDataList">
+            <template #left>
+              <el-input placeholder="昵称、手机号、ID" class="short" v-model="filter.keyword" clearable
+                        style="margin-right:10px;width:200px;">
+                <template #prefix>
+                  <el-icon class="el-input__icon">
+                    <search></search>
+                  </el-icon>
+                </template>
+              </el-input>
+              <el-button icon="search" type="primary"
+                         @click="loadDataList(1)">查询
+              </el-button>
+              <el-button
+                  icon="refresh"
+                  @click="initDataList">重置
+              </el-button>
+              <el-button
+                  type="text"
+                  @click="$refs.search.show(filter)"
+              >
+                高级搜索
+                <el-icon>
+                  <arrow-down></arrow-down>
+                </el-icon>
+              </el-button>
+            </template>
+            <template #right>
+              <el-button icon="plus" circle
+                         @click="onButtonClick({user_id: ''}, 'add')"></el-button>
+              <el-button icon="refresh" circle @click="loadDataList(page)"></el-button>
+            </template>
+          </tbc-pagination>
+        </div>
     </template>
 
-    <div class="main-card"
-         v-loading="loading">
-      <tbc-pagination :total="total" simple :config="{page, size}" @change="loadDataList">
-        <template #left>
-          <el-input placeholder="昵称、手机号、ID" class="short" v-model="filter.keyword" clearable size="small"
-                    style="margin-right:10px;width:200px;">
-            <template #prefix>
-              <i class="el-icon el-icon-search"></i>
-            </template>
-          </el-input>
-          <el-button
-              icon="el-icon-search" type="primary" size="small"
-              @click="loadDataList(1)">查询
-          </el-button>
-          <el-button
-              icon="el-icon-refresh" size="small"
-              @click="initDataList">重置
-          </el-button>
-          <el-button
-              type="text"
-              @click="$refs.search.show(filter)"
-          >
-            高级搜索
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-        </template>
-        <template #right>
-          <el-button size="small" icon="el-icon-plus" circle
-                     @click="onButtonClick({user_id: ''}, 'add')"></el-button>
-          <el-button size="small" icon="el-icon-refresh" circle @click="loadDataList(page)"></el-button>
-        </template>
-      </tbc-pagination>
+    <div class="main-card" v-loading="loading" style="border-radius: 4px">
+
       <div class="data-container">
         <tbc-dynamic-table
             :data="dataList"
@@ -99,7 +104,7 @@
             <p>
               <el-tag
                   effect="dark"
-                  size="mini"
+                  size="small"
                   v-if="scope.row.status === 1"
                   type="success"
               >正常

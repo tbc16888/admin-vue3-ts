@@ -9,7 +9,8 @@ export default function () {
         loading: false,
         total: 0, page: 1, size: 10,
         keyword: '', dataList: [],
-        parentId: ''
+        parentId: '',
+        menuPath: []
     })
 
     // 请求数据

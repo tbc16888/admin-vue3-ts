@@ -10,7 +10,7 @@
             <el-input type="textarea" v-model="form.role_desc" rows="3"></el-input>
           </el-form-item>
           <el-form-item label="状态">
-            <el-radio-group v-model="form.status" size="medium">
+            <el-radio-group v-model="form.status">
               <el-radio :label="option.value"
                         v-for="(option, idx) in  [{label: '使用', value: 1}, {label: '禁用', value: 2}]" :key="idx">
                 {{ option.label }}
@@ -19,9 +19,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item>
-            <div><label class="el-form-item__label">权限配置</label></div>
-            <div style="height:300px;overflow:auto">
+          <el-form-item label="权限配置">
+            <div style="height:300px;overflow:auto;width: 100%">
               <el-tree ref="tree" :props="props" node-key="menu_code" :highlight-current="true" :data="menuList"
                        :default-checked-keys="defaultChecked" show-checkbox>
               </el-tree>

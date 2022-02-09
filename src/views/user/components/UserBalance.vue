@@ -2,14 +2,13 @@
   <tbc-dialog title="账户明细" ref="dialog" basic :close-on-click-modal="true" width="900px">
     <tbc-pagination :total="total" :config="{page, size}" simple @change="loadDataList">
       <template #left>
-
-        <el-select v-model="type" size="small" style="margin-right: 10px;width:120px">
+        <el-select v-model="type" style="margin-right: 10px;width:120px">
           <el-option v-for="(item, index) in typeList" :key="index" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-input v-model="keyword" size="small" style="margin-right: 10px;width:160px" placeholder="关键词">
+        <el-input v-model="keyword" style="margin-right: 10px;width:160px" placeholder="关键词" clearable>
         </el-input>
         <el-button
-            icon="el-icon-search" type="primary" size="small"
+            icon="search" type="primary"
             @click="loadDataList(1)">查询
         </el-button>
       </template>
@@ -24,16 +23,16 @@
             {label: '数量', prop: 'change_amount', width: 200},
             {label: '时间', prop: 'change_time', width: 200},
             {label: '描述', prop: 'change_desc'}]">
-        <template v-slot:log_id="scope">
+        <template #log_id="scope">
           <p>{{ scope.row.log_id }}</p>
           <p>{{ scope.row.change_type_name }}</p>
         </template>
-        <template v-slot:change_amount="scope">
+        <template #change_amount="scope">
           <p v-if="scope.row.change_amount > 0">
-            <el-tag size="mini" type="success">{{ scope.row.change_amount }}</el-tag>
+            <el-tag type="success">{{ scope.row.change_amount }}</el-tag>
           </p>
           <p v-if="scope.row.change_amount < 0">
-            <el-tag size="mini" type="danger">{{ scope.row.change_amount }}</el-tag>
+            <el-tag type="danger">{{ scope.row.change_amount }}</el-tag>
           </p>
         </template>
       </tbc-dynamic-table>

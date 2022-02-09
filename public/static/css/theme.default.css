@@ -2,7 +2,7 @@
 .layout-header{height:60px;line-height: 60px;background:#FFF;box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);z-index: 100;}
 .layout-side{position:fixed;z-index:98;top:0;bottom:0;left:0;width:220px;overflow:auto;background: #FFF;box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);}
 .layout-main{overflow-x:hidden}
-.layout-header.fixed{position:fixed;top:0;left:220px;right: 0}
+.layout-header.fixed{position:fixed;top:0;left:220px;right: 0;z-index: 2001}
 
 
 .layout-side .el-menu-item,
